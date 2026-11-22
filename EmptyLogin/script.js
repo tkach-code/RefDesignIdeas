@@ -1,7 +1,7 @@
 const usernameInput = document.querySelector('.username-input');
 const passwordInput = document.querySelector('.password-input');
 const loginButton = document.querySelector('.login-button');
-const textInputs = [usernameInput, passwordInput];
+const home = document.querySelector('.home');
 const measureContext = document.createElement('canvas').getContext('2d');
 
 function updateControlFontSize(control, displayValue, shrinkByCharacterCount = false) {
@@ -29,24 +29,34 @@ function updateInputFontSize(input) {
   updateControlFontSize(input, displayValue, true);
 }
 
-function updateInputFontSizes() {
-  textInputs.forEach(updateInputFontSize);
-  updateControlFontSize(loginButton, loginButton.textContent);
-}
+if (usernameInput && passwordInput && loginButton) {
+  const textInputs = [usernameInput, passwordInput];
 
-function updateLoginButton() {
-  const hasCredentials = usernameInput.value && passwordInput.value;
-  loginButton.textContent = hasCredentials ? 'Login' : '';
-  updateControlFontSize(loginButton, loginButton.textContent);
-}
+  function updateInputFontSizes() {
+    textInputs.forEach(updateInputFontSize);
+    updateControlFontSize(loginButton, loginButton.textContent);
+  }
 
-textInputs.forEach((input) => {
-  input.addEventListener('input', () => {
-    updateInputFontSize(input);
-    updateLoginButton();
+  function updateLoginButton() {
+    const hasCredentials = usernameInput.value && passwordInput.value;
+    loginButton.textContent = hasCredentials ? 'Login' : '';
+    updateControlFontSize(loginButton, loginButton.textContent);
+  }
+
+  textInputs.forEach((input) => {
+    input.addEventListener('input', () => {
+      updateInputFontSize(input);
+      updateLoginButton();
+    });
   });
-});
 
-window.addEventListener('resize', updateInputFontSizes);
-updateInputFontSizes();
-updateLoginButton();
+  window.addEventListener('resize', updateInputFontSizes);
+  updateInputFontSizes();
+  updateLoginButton();
+}
+
+if (home) {
+  const fitHome = () => updateControlFontSize(home, home.textContent.trim());
+  window.addEventListener('resize', fitHome);
+  fitHome();
+}

@@ -7,16 +7,35 @@ const files = {
   '/index.html': ['index.html', 'text/html; charset=utf-8'],
   '/styles.css': ['styles.css', 'text/css; charset=utf-8'],
   '/script.js': ['script.js', 'text/javascript; charset=utf-8'],
+  '/home': ['home.html', 'text/html; charset=utf-8'],
+  '/home.html': ['home.html', 'text/html; charset=utf-8'],
 };
 
 const server = http.createServer((request, response) => {
+  const { pathname } = new URL(request.url, 'http://localhost');
+
+  if (request.method === 'POST' && pathname === '/login') {
+    const chunks = [];
+
+    request.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+
+    request.on('end', () => {
+      const values = Object.fromEntries(new URLSearchParams(Buffer.concat(chunks).toString('utf8')));
+      console.log(values);
+      response.writeHead(303, { Location: '/home' });
+      response.end();
+    });
+    return;
+  }
+
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     response.writeHead(405, { Allow: 'GET, HEAD' });
     response.end();
     return;
   }
 
-  const { pathname } = new URL(request.url, 'http://localhost');
   const file = files[pathname];
 
   if (!file) {
