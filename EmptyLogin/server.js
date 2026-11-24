@@ -20,7 +20,7 @@ app.use((req, res) => {
 });
 
 const port = Number(process.env.PORT) || 8000;
-const host = '127.0.0.1';
+const host = 'localhost';
 
 app.listen(port, host, () => {
   console.log(`Serving at http://${host}:${port}/`);

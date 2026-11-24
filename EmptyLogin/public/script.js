@@ -88,6 +88,9 @@ function initLoginForm(form) {
 }
 
 function initHome(home) {
+  const username = new URLSearchParams(window.location.search).get('username');
+  home.textContent = username ? `Hello ${username}` : 'Hello';
+
   const render = () => fitControl(home, home.textContent.trim());
   observeSize(home.closest('main') ?? home, render);
   render();
